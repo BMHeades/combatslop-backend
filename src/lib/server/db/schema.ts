@@ -2,7 +2,6 @@ import { uuid, pgTable, boolean, integer, text, primaryKey, varchar, timestamp }
 
 export const videos = pgTable('videos', {
 	id: varchar('id', { length: 11 }).notNull().primaryKey(),
-	creatorHandle: text('creator_handle'),
 	up: integer('up').notNull().default(0),		// denormalized counters
 	down: integer('down').notNull().default(0), // denormalized counters
 	createdAt: timestamp('created_at').notNull().defaultNow(),

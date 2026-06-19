@@ -2,14 +2,13 @@ import { sql, eq } from "drizzle-orm";
 import { db } from "."
 import { videos, videoVotes } from "./schema"
 
-export const vote = async (videoId: string, creatorHandle: string, isSlop: boolean, voterId: string, voterIp: string) => {
+export const vote = async (videoId: string, isSlop: boolean, voterId: string, voterIp: string) => {
     console.log('new vote')
     try {
         await db.transaction(async (tx) => {
 
             await tx.insert(videos).values({
                 id: videoId,
-                creatorHandle,
                 up: isSlop ? 0 : 1,
                 down: isSlop ? 1 : 0,
             }).onConflictDoUpdate({

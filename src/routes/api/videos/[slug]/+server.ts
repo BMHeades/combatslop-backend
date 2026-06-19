@@ -23,11 +23,6 @@ export const GET: RequestHandler = async ({ params }) => {
 
 export const POST: RequestHandler = async ({ request, params, getClientAddress }) => {
     const voteSchema = v.object({
-        creatorHandle: v.pipe(
-            v.string(),
-            v.nonEmpty(),
-            v.maxLength(50)
-        ),
 
         isSlop: v.boolean(),
         voterId: v.pipe(
@@ -39,10 +34,10 @@ export const POST: RequestHandler = async ({ request, params, getClientAddress }
     const videoId = v.parse(videoIdSchema, params.slug)
 
     const data = await request.json()
-    const { creatorHandle, isSlop, voterId } = v.parse(voteSchema, data)
+    const { isSlop, voterId } = v.parse(voteSchema, data)
 
     const voterIp = getClientAddress()
 
-    await vote(videoId, creatorHandle, isSlop, voterId, voterIp)
+    await vote(videoId, isSlop, voterId, voterIp)
     return new Response();
 };
