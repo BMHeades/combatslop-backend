@@ -22,35 +22,38 @@ import { env } from '$env/dynamic/private';
 export const handle: Handle = async ({ event, resolve }) => {
 
 
-    if (!env.CHROME_EXTENSION_ID || !env.FIREFOX_EXTENSION_ID) {
-        throw new Error('Extension IDs are not set');
-    }
+    // if (!env.CHROME_EXTENSION_ID || !env.FIREFOX_EXTENSION_ID) {
+    //     throw new Error('Extension IDs are not set');
+    // }
 
     const origin = event.request.headers.get('origin');
     console.log(origin)
 
-    const allowedOrigins = [
-        `chrome-extension://${env.CHROME_EXTENSION_ID}`,
-        `moz-extension://${env.FIREFOX_EXTENSION_ID}`
-    ];
+    // const allowedOrigins = [
+    //     `chrome-extension://${env.CHROME_EXTENSION_ID}`,
+    //     `moz-extension://${env.FIREFOX_EXTENSION_ID}`
+    // ];
 
     if (event.url.pathname.startsWith('/api')) {
-        if (!origin || !allowedOrigins.includes(origin)) {
+        // if (!origin || !allowedOrigins.includes(origin)) {
+        //     error(403, 'unknown');
+        // }
+        if(!origin?.startsWith('chrome-extension://') && !origin?.startsWith('moz-extension://')){
             error(403, 'unknown');
         }
     }
 
     // Handle preflight
-    if (event.request.method === 'OPTIONS') {
-        return new Response(null, {
-            headers: {
-                'Access-Control-Allow-Origin': origin!,
-                'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-                'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-                'Vary': 'Origin'
-            }
-        });
-    }
+    // if (event.request.method === 'OPTIONS') {
+    //     return new Response(null, {
+    //         headers: {
+    //             'Access-Control-Allow-Origin': origin!,
+    //             'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+    //             'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    //             'Vary': 'Origin'
+    //         }
+    //     });
+    // }
 
     const response = await resolve(event);
 
