@@ -16,7 +16,7 @@ const IdsSchema = v.pipe(
 )
 
 export const POST: RequestHandler = async ({ request }) => {
-    console.log(request.headers.get('origin'))
+    // console.log(request.headers.get('origin'))
 
     const data = await request.json()
 

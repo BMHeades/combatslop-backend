@@ -10,7 +10,7 @@ const videoIdSchema = v.pipe(
 
 
 export const GET: RequestHandler = async ({ params, request }) => {
-    console.log(request.headers.get('origin'))
+    // console.log(request.headers.get('origin'))
 
     let videoId
     try{

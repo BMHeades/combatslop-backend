@@ -25,12 +25,12 @@ export const vote = async (videoId: string, isSlop: boolean, voterId: string, vo
                 voterIp
             })
         })
-        console.log('new vote')
+        console.log('[new vote]')
 
     }
     catch(e){
         // console.log(e)
-        console.log("duplicate vote")
+        console.log("[duplicate vote]")
     }
 }
 
