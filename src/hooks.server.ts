@@ -20,11 +20,14 @@ import { env } from '$env/dynamic/private';
 // };
 
 export const handle: Handle = async ({ event, resolve }) => {
+
+
     if (!env.CHROME_EXTENSION_ID || !env.FIREFOX_EXTENSION_ID) {
         throw new Error('Extension IDs are not set');
     }
 
     const origin = event.request.headers.get('origin');
+    console.log(origin)
 
     const allowedOrigins = [
         `chrome-extension://${env.CHROME_EXTENSION_ID}`,
