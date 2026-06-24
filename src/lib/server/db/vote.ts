@@ -3,7 +3,6 @@ import { db } from "."
 import { videos, videoVotes } from "./schema"
 
 export const vote = async (videoId: string, isSlop: boolean, voterId: string, voterIp: string) => {
-    console.log('new vote')
     try {
         await db.transaction(async (tx) => {
 
@@ -26,6 +25,8 @@ export const vote = async (videoId: string, isSlop: boolean, voterId: string, vo
                 voterIp
             })
         })
+        console.log('new vote')
+
     }
     catch(e){
         // console.log(e)
@@ -33,7 +34,11 @@ export const vote = async (videoId: string, isSlop: boolean, voterId: string, vo
     }
 }
 
-export const isVideoSlop = async (videoId: string) => {
+export const checkForSlop = async (videoId: string): Promise<0 | 1 | 2> => {
+
+// 0 => not slop
+// 1 => is slop
+// 2 => unknown
 
     const result = await db.select({
         up: videos.up,
@@ -42,5 +47,14 @@ export const isVideoSlop = async (videoId: string) => {
     .from(videos)
     .where(eq(videos.id, videoId))
 
-    return result
+    if(result.length === 1){
+        const upVotes = result[0].up
+        const downVotes = result[0].down
+        const totalVotes = upVotes + downVotes
+
+        if (downVotes/totalVotes >= 0.5) return 1
+        
+        return 0
+    }
+    return 2
 }
