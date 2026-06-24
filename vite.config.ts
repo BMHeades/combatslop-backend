@@ -20,8 +20,6 @@ export default defineConfig({
 			csrf: {
 				checkOrigin: false
 				// trustedOrigins: [
-				// 	'chrome-extension://pbacojemoddcchhbabbecnpjmmpalidb',
-				// 	'moz-extension://your_firefox_extension_id_here'
 				// ]
 			},
 			typescript: {
