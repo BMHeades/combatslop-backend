@@ -2,23 +2,6 @@ import { error, type Handle } from '@sveltejs/kit';
 import { env } from '$env/dynamic/private';
 
 
-
-// export const handle: Handle = async ({ event, resolve }) => {
-    
-//     if (!env.CLIENT_ID) throw new Error('CLIENT_ID is not set');
-    
-//     const origin = event.request.headers.get('origin');
-
-//     if(!origin) error(403, "unknown")
-
-
-//     const response = await resolve(event);
-//     if (event.url.pathname.startsWith('/api')) {
-//         response.headers.append('Access-Control-Allow-Origin', env.CLIENT_ID);
-//     }
-//     return response;
-// };
-
 export const handle: Handle = async ({ event, resolve }) => {
 
 
@@ -38,12 +21,12 @@ export const handle: Handle = async ({ event, resolve }) => {
         // if (!origin || !allowedOrigins.includes(origin)) {
         //     error(403, 'unknown');
         // }
-        if(!origin?.startsWith('chrome-extension://') && !origin?.startsWith('moz-extension://')){
+        if(!origin?.startsWith(env.CHROME_EXTENSION_ID) && !origin?.startsWith(env.FIREFOX_EXTENSION_ID)){
             error(403, 'unknown');
         }
     }
 
-    // Handle preflight
+    // Handle preflight // NOT NEEDED
     // if (event.request.method === 'OPTIONS') {
     //     return new Response(null, {
     //         headers: {

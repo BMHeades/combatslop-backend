@@ -54,7 +54,7 @@ export const checkForSlop = async (videoId: string): Promise<0 | 1 | 2> => {
 
         if (downVotes/totalVotes >= 0.5) return 1
         
-        return 0
+        if(upVotes >= 1) return 0
     }
     return 2
 }
