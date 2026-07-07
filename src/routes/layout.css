@@ -1,1 +1,10 @@
-/* @import 'tailwindcss'; */
+@import 'tailwindcss';
+
+@layer base{
+    label{
+        @apply text-stone-100
+    }
+    input{
+        @apply bg-stone-800 w-100 h-8 p-1 px-2  border border-stone-500 rounded-lg mb-3 mt-1
+    }
+}

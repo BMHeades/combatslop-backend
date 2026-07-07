@@ -1,6 +1,6 @@
 import { sql, eq } from "drizzle-orm";
 import { db } from "."
-import { videos, videoVotes } from "./schema"
+import { videos, videoVotes, channels } from "./schema"
 
 export const vote = async (videoId: string, isSlop: boolean, voterId: string, voterIp: string) => {
     try {
@@ -28,33 +28,47 @@ export const vote = async (videoId: string, isSlop: boolean, voterId: string, vo
         console.log('[new vote]')
 
     }
-    catch(e){
+    catch (e) {
         // console.log(e)
         console.log("[duplicate vote]")
     }
 }
 
+export const channelVote = async (voterId: string, voterIp: string, channelId: string, isSlop: boolean) => {
+
+    await db.insert(channels).values({
+        voterId,
+        voterIp,
+        channelId,
+        isSlop
+    })
+    console.log('[new channel vote]')
+
+
+
+}
+
 export const checkForSlop = async (videoId: string): Promise<0 | 1 | 2> => {
 
-// 0 => not slop
-// 1 => is slop
-// 2 => unknown
+    // 0 => not slop
+    // 1 => is slop
+    // 2 => unknown
 
     const result = await db.select({
         up: videos.up,
         down: videos.down
     })
-    .from(videos)
-    .where(eq(videos.id, videoId))
+        .from(videos)
+        .where(eq(videos.id, videoId))
 
-    if(result.length === 1){
+    if (result.length === 1) {
         const upVotes = result[0].up
         const downVotes = result[0].down
         const totalVotes = upVotes + downVotes
 
-        if (downVotes/totalVotes >= 0.5) return 1
-        
-        if(upVotes >= 1) return 0
+        if (downVotes / totalVotes >= 0.5) return 1
+
+        if (upVotes >= 1) return 0
     }
     return 2
 }

@@ -1,0 +1,48 @@
+import { channelVote } from '$lib/server/db/vote';
+import type { Actions } from './$types';
+import { error, fail } from '@sveltejs/kit';
+import * as v from 'valibot'
+
+const ReportSchema = v.object({
+    channel: v.pipe(
+        v.string(),
+        v.nonEmpty('Please enter channel id or url')
+    ),
+    devKey: v.pipe(
+        v.string(),
+        v.uuid('Invalid developer key')
+    )
+})
+
+export const actions = {
+    default: async (event) => {
+        const data = await event.request.formData()
+
+        // console.log("channel id", data.get('channel'))
+        // console.log("devkey", data.get('devKey'))
+
+
+        try {
+            const reportData = v.parse(ReportSchema, {
+                channel: data.get('channel') as string,
+                devKey: data.get('devKey') as string
+            })
+
+            try {
+                await channelVote(reportData.devKey, event.getClientAddress(), reportData.channel, true)
+            } catch (e) {
+                return fail(400, {
+                    error: "Invalid developer key"
+                })
+            }
+        }
+        catch (e) {
+            if (e instanceof v.ValiError) {
+                return fail(400, {
+                    error: e.message
+                })
+            }
+        }
+        return { success: true }
+    }
+} satisfies Actions;

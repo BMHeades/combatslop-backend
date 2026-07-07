@@ -19,4 +19,17 @@ export const videoVotes = pgTable('video_votes', {
 	]
 )
 
-// ADD INDEXes
+export const channels = pgTable('channels', {
+	voterId: uuid('voter_id').notNull().references(() => devs.id), // No primary keys for now
+	voterIp: text('voter_ip').notNull(),
+	channelId: text('channel_id').notNull(),
+	isSlop: boolean('is_slop').notNull(),
+	createdAt: timestamp('created_at').notNull().defaultNow(),
+})
+
+export const devs = pgTable('devs', {
+	id: uuid('id').notNull().primaryKey(),
+	role: text('role'),
+	misc: text('misc'),
+	createdAt: timestamp('created_at').notNull().defaultNow(),
+})
