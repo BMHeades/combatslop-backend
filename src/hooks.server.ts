@@ -10,7 +10,6 @@ export const handle: Handle = async ({ event, resolve }) => {
     // }
 
     const origin = event.request.headers.get('origin');
-    console.log(origin)
 
     // const allowedOrigins = [
     //     `chrome-extension://${env.CHROME_EXTENSION_ID}`,
@@ -21,6 +20,8 @@ export const handle: Handle = async ({ event, resolve }) => {
         // if (!origin || !allowedOrigins.includes(origin)) {
         //     error(403, 'unknown');
         // }
+    console.log(origin)
+
         if(!origin?.startsWith(env.CHROME_EXTENSION_ID) && !origin?.startsWith(env.FIREFOX_EXTENSION_ID)){
             error(403, 'unknown');
         }
