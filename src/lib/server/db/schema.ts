@@ -20,10 +20,11 @@ export const videoVotes = pgTable('video_votes', {
 )
 
 export const channels = pgTable('channels', {
-	voterId: uuid('voter_id').notNull().references(() => devs.id), // No primary keys for now
+	voterId: uuid('voter_id').notNull().references(() => devs.id), 
 	voterIp: text('voter_ip').notNull(),
-	channelId: text('channel_id').notNull(),
+	channelId: text('channel_id').notNull().primaryKey(),
 	isSlop: boolean('is_slop').notNull(),
+	reviewed: text('reviewed').notNull().default('unknown'),
 	createdAt: timestamp('created_at').notNull().defaultNow(),
 })
 
