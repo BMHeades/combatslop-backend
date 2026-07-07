@@ -1,6 +1,6 @@
 <script lang="ts">
     import { enhance } from "$app/forms";
-
+    import icon from "$lib/assets/icon.png"
     import type { PageProps } from "./$types";
 
     // let success = $state(false)
@@ -10,8 +10,9 @@
 
 <main class="flex flex-col items-center p-4">
     <div class="p-5">
-        <!-- <h1 class="text-2xl">Combat Slop Mass Report</h1> -->
+        <img src={icon} alt="Black Cat Combat Slop Logo">
     </div>
+
 
     {#if !form?.success}
         <form method="POST" use:enhance>
@@ -65,7 +66,7 @@
         </form>
     {:else}
         <div class="p-2 pb-10">
-            <h1 class="text-2xl">Reported successfully</h1>
+            <h1 class="text-2xl text-stone-100">Reported successfully</h1>
         </div>
         <div>
             <h2 class="text-xl pb-3 text-stone-200">What happens next?</h2>

@@ -33,6 +33,9 @@ export const actions = {
                     error: e.message
                 })
             }
+            return fail(400, {
+                error: "Unknown error occured"
+            })
         }
 
         return { success: true }
