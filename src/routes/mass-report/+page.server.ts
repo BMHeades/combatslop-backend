@@ -9,7 +9,7 @@ const ReportSchema = v.object({
     ),
     devKey: v.pipe(
         v.string(),
-        v.uuid('Bad developer key')
+        v.uuid('Invalid developer key')
     )
 })
 
