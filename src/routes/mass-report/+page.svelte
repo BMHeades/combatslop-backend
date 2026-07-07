@@ -23,7 +23,7 @@
                 <input
                     id="channel"
                     type="text"
-                    placeholder="Enter channel id or url"
+                    placeholder="Enter channel id, tag or url"
                     name="channel"
                     required
                 />
