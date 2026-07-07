@@ -1,6 +1,6 @@
 import { sql, eq } from "drizzle-orm";
 import { db } from "."
-import { videos, videoVotes } from "./schema"
+import { videos, videoVotes, channels } from "./schema"
 
 export const vote = async (videoId: string, isSlop: boolean, voterId: string, voterIp: string) => {
     try {
@@ -31,6 +31,24 @@ export const vote = async (videoId: string, isSlop: boolean, voterId: string, vo
     catch(e){
         // console.log(e)
         console.log("[duplicate vote]")
+    }
+}
+
+export const channelVote = async (voterId: string, voterIp: string, channelId: string,  isSlop: boolean) => {
+    try {
+        
+        await db.insert(channels).values({
+            voterId,
+            voterIp,
+            channelId,
+            isSlop
+        })
+        console.log('[new channel vote]')
+
+    }
+    catch(e){
+        // console.log(e)
+        // console.log("[duplicate vote]")
     }
 }
 
