@@ -1,7 +1,7 @@
 import { error, json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import * as v from 'valibot'
-import { vote, checkForSlop } from '$lib/server/db/vote';
+import { vote, checkForSlop, undoVote } from '$lib/server/db/vote';
 
 const videoIdSchema = v.pipe(
     v.string(),
@@ -21,6 +21,15 @@ export const GET: RequestHandler = async ({ params, request }) => {
 
     const isSlop = await checkForSlop(videoId)
     return json({isSlop})
+};
+
+export const DELETE: RequestHandler = async ({ params, request }) => {
+   
+    const data = await request.json()
+    console.log(data, params.slug)
+   
+    undoVote(params.slug, data.voterId)
+    return new Response()
 };
 
 export const POST: RequestHandler = async ({ request, params, getClientAddress }) => {

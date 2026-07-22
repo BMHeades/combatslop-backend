@@ -24,7 +24,7 @@ export const channels = pgTable('channels', {
 	voterIp: text('voter_ip').notNull(),
 	channelId: text('channel_id').notNull().primaryKey(),
 	isSlop: boolean('is_slop').notNull(),
-	reviewed: text('reviewed').notNull().default('unknown'),
+	reviewed: text('reviewed').notNull().default('unknown'), // unknown || passed || failed
 	createdAt: timestamp('created_at').notNull().defaultNow(),
 })
 
