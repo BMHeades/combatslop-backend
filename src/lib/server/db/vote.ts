@@ -1,4 +1,4 @@
-import { sql, eq } from "drizzle-orm";
+import { sql, eq, and } from "drizzle-orm";
 import { db } from "."
 import { videos, videoVotes, channels } from "./schema"
 
@@ -34,6 +34,26 @@ export const vote = async (videoId: string, isSlop: boolean, voterId: string, vo
     }
 }
 
+export const undoVote = async (videoId: string, voterId: string) => {
+    try {
+        const deletedVote = await db.delete(videoVotes)
+            .where(and(eq(videoVotes.videoId, videoId), eq(videoVotes.voterId, voterId)))
+            .returning({ isSlop: videoVotes.isSlop })
+
+        console.log(deletedVote)
+        if (deletedVote.length === 1) {
+            await db.update(videos).set({
+                up: sql`${videos.up} - ${deletedVote[0].isSlop ? 0 : 1}`,
+                down: sql`${videos.down} - ${deletedVote[0].isSlop ? 1 : 0}`,
+            })
+        }
+    }
+    catch (e) {
+        // console.log(e)
+        console.log("[failed undo]")
+    }
+}
+
 export const channelVote = async (voterId: string, voterIp: string, channelId: string, isSlop: boolean) => {
 
     await db.insert(channels).values({
@@ -43,9 +63,6 @@ export const channelVote = async (voterId: string, voterIp: string, channelId: s
         isSlop
     })
     console.log('[new channel vote]')
-
-
-
 }
 
 export const checkForSlop = async (videoId: string): Promise<0 | 1 | 2> => {
