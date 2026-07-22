@@ -23,15 +23,6 @@ export const GET: RequestHandler = async ({ params, request }) => {
     return json({isSlop})
 };
 
-export const DELETE: RequestHandler = async ({ params, request }) => {
-   
-    const data = await request.json()
-    console.log(data, params.slug)
-   
-    undoVote(params.slug, data.voterId)
-    return new Response()
-};
-
 export const POST: RequestHandler = async ({ request, params, getClientAddress }) => {
     const voteSchema = v.object({
 
